@@ -1,0 +1,261 @@
+html {
+  height: 100%;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  font-family: "DM Sans";
+  font-size: 14px;
+  position: relative;
+}
+
+.customized-scrollbar {
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 20px;
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background-color: #e9e7f6;
+  }
+}
+
+// main layout
+
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-layout__header {
+  position: sticky;
+  top: 0;
+  background-color: #2e3138;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  padding: 10px;
+  h1 {
+    font-size: 14px;
+  }
+}
+
+.main-layout__content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.main-layout__header-button {
+  background-color: #1574ef;
+  border: none;
+  color: white; /* Text color is black */
+  padding: 0 20px;
+  height: 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 6px;
+  transition-duration: 0.4s;
+}
+
+.main-layout__header-button:hover {
+  background-color: #1574ef;
+}
+
+// preview page
+
+//edit page
+
+.edit-template__content {
+  width: calc(100% - 300px);
+  height: calc(100% - 52px);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.edit-template__page {
+  margin: 0 auto;
+}
+.edit-template__list-element {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.edit-template__element-item {
+  display: flex;
+  justify-content: space-between;
+  border: 2px solid white;
+  &:hover {
+    border: 2px solid #3474e0;
+  }
+}
+
+.edit-template__element-item_selected {
+  border: 2px solid #3474e0;
+}
+
+.edit-template__page-settings-container {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 0;
+  width: 300px;
+  height: calc(100% - 52px);
+  overflow-y: hidden;
+
+  border-left: 1px solid #e0e0e0;
+  h3 {
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 20px 0px;
+    margin: 0;
+  }
+}
+
+.edit-template__page-settings {
+  padding: 15px;
+  height: 100%;
+  overflow: auto;
+}
+
+.edit-template__page-settings-item {
+  padding: 20px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid #e0e0e0;
+
+  .title-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .title {
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .value {
+    color: #bfc3e0;
+    font-size: 14px;
+    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.input-text {
+  width: 100%;
+  padding: 8px 16px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid black;
+  border-radius: 4px;
+  background-color: white;
+  color: black;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  .selected {
+    background-color: black;
+    color: white;
+  }
+}
+
+.button-group button {
+  color: black;
+  border: none;
+  background: white;
+  border: 1px solid black;
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.radio-button-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+
+.radio-button-group input[type="radio"] {
+  margin-right: 10px;
+}
+
+.textarea {
+  min-height: 150px;
+}
+
+.color-picker {
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 5px;
+}
+
+.tooltip-container {
+  position: relative;
+  width: 100%;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  top: 50%; /* Position the tooltip in the vertical center of the container */
+  left: 100%; /* Position the tooltip to the right of the container */
+  margin-left: 10px; /* Add some space between the tooltip and the container */
+  margin-top: -30px; /* Use half the height to center the tooltip vertically */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
