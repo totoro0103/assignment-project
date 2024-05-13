@@ -11,7 +11,6 @@ import {
   Droppable,
   Draggable,
   DropResult,
-  DragStart,
 } from "react-beautiful-dnd";
 
 type EditTemplateProps = unknown;
