@@ -1,6 +1,7 @@
 import { ElementSettingsApplyAs, Element as IElement } from "../../../types";
 import { clsx } from "clsx";
 import { Tooltip } from "../../../components/Element/Tooltip";
+import { MdOutlineClose } from "react-icons/md";
 
 import parse from "html-react-parser";
 
@@ -8,12 +9,14 @@ type ElementProps = {
   data: IElement;
   isSelected: boolean;
   onSelect: (element: IElement) => void;
+  onRemove: (element: IElement) => void;
 };
 
 export const Element: React.FC<ElementProps> = ({
   data,
   isSelected,
   onSelect,
+  onRemove,
 }) => {
   const getHtmlFromSettings = () => {
     const divContainer = document.createElement("div");
@@ -62,6 +65,14 @@ export const Element: React.FC<ElementProps> = ({
         }}>
         {parse(html)}
       </div>
+      {isSelected && (
+        <div
+          className='edit-template__remove-element'
+          role='presentation'
+          onClick={() => onRemove(data)}>
+          <MdOutlineClose />
+        </div>
+      )}
     </Tooltip>
   );
 };

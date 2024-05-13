@@ -121,7 +121,7 @@ export const exportHandler = (data: Template) => {
   const blobUrl = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = blobUrl;
-  link.download = "output.html"; // The name of the downloaded file
+  link.download = "template.html"; // The name of the downloaded file
   link.click();
 };
 
@@ -132,7 +132,7 @@ export const getTemplate = (): Template[] => {
       label: "Page Settings",
       type: ElementTypes.Page,
       stringHtml: "<div/>",
-      settings: getPagesElementSettings(),
+      settings: getPagesElementSettings({}),
     },
     {
       id: makeId(),

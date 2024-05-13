@@ -1,14 +1,24 @@
-import { useMemo, useState } from "react";
-import { exportHandler, getTemplate } from "../../utils";
+import { useCallback, useMemo, useState } from "react";
+import { exportHandler, generateHtml, getTemplate } from "../../utils";
 import { Element } from "./components/Element";
 import { Element as IElement, ElementTypes, Template } from "../../types";
 import { ElementSettingItem } from "./components/ElementSettingItem";
 import { MainLayout } from "../../components/Layout/MainLayout";
 import { useParams } from "react-router-dom";
+import { Modal } from "../../components/Element/Modal";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+  DragStart,
+} from "react-beautiful-dnd";
+
 type EditTemplateProps = unknown;
 const templates = getTemplate();
 
 export const EditTemplate: React.FC<EditTemplateProps> = () => {
+  const [isOpenPreview, setIsOpenPreview] = useState(false);
   const params = useParams();
   const id = params.id as string;
 
@@ -57,30 +67,39 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
     exportHandler({ name: templateData.name, elements });
   };
 
-  const handleChangeSetting = (id: string, key: any, value: any) => {
-    setElements((oldData) => {
-      const newData = oldData.map((element) => {
-        if (element.id === id) {
-          const settings = element.settings.map((setting) => {
-            if (setting.key === key) {
-              return {
-                ...setting,
-                value,
-              };
-            }
-            return setting;
-          });
+  const handleChangeSetting = useCallback(
+    (id: string, key: any, value: any) => {
+      setElements((oldData) => {
+        const newData = oldData.map((element) => {
+          if (element.id === id) {
+            const settings = element.settings.map((setting) => {
+              if (setting.key === key) {
+                return {
+                  ...setting,
+                  value,
+                };
+              }
+              return setting;
+            });
 
-          return {
-            ...element,
-            settings,
-          };
-        }
-        return element;
+            return {
+              ...element,
+              settings,
+            };
+          }
+          return element;
+        });
+        return newData;
       });
-      return newData;
-    });
-  };
+    },
+    []
+  );
+
+  const handleRemoveElement = useCallback((val: IElement) => {
+    setElements((prevData) =>
+      prevData.filter((element) => element.id !== val.id)
+    );
+  }, []);
 
   const pageSettingsComponent = useMemo(() => {
     const settings = elements.find(
@@ -110,6 +129,27 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
     );
   }, [elementSelected, elements, handleChangeSetting]);
 
+  const reorder = (list: IElement[], startIndex: number, endIndex: number) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+  };
+
+  const handleDragEnd = (result: DropResult) => {
+    console.log(result);
+    if (!result.destination) {
+      return;
+    }
+    const items = reorder(
+      elements.filter((element) => element.type !== ElementTypes.Page),
+      result.source.index,
+      result.destination.index
+    );
+
+    setElements([pageElement, ...items]);
+  };
   const listElementComponent = useMemo(
     () => (
       <div className='content'>
@@ -119,24 +159,49 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
           onClick={() => {
             handleSelectElement(pageElement as IElement);
           }}>
-          <div
-            className='edit-template__list-element'
-            style={{
-              ...pageStyles,
-            }}>
-            {elements
-              .filter((element) => element.type !== ElementTypes.Page)
-              .map((element) => {
-                return (
-                  <Element
-                    isSelected={elementSelected.id === element.id}
-                    key={element.id}
-                    data={element}
-                    onSelect={handleSelectElement}
-                  />
-                );
-              })}
-          </div>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId='droppable'>
+              {(droppableProvided) => (
+                <div
+                  className='edit-template__list-element'
+                  {...droppableProvided.droppableProps}
+                  ref={droppableProvided.innerRef}
+                  style={{
+                    ...pageStyles,
+                  }}>
+                  {elements
+                    .filter((element) => element.type !== ElementTypes.Page)
+                    .map((element, index) => {
+                      return (
+                        <Draggable
+                          key={element.id}
+                          draggableId={element.id}
+                          index={index}>
+                          {(draggableProvided) => {
+                            return (
+                              <div
+                                key={element.id}
+                                ref={draggableProvided.innerRef}
+                                {...draggableProvided.draggableProps}
+                                {...draggableProvided.dragHandleProps}>
+                                <Element
+                                  isSelected={elementSelected.id === element.id}
+                                  key={element.id}
+                                  data={element}
+                                  onSelect={handleSelectElement}
+                                  onRemove={handleRemoveElement}
+                                />
+                              </div>
+                            );
+                          }}
+                        </Draggable>
+                      );
+                    })}
+                  {droppableProvided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
       </div>
     ),
@@ -146,15 +211,30 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
   return (
     <MainLayout
       headerRightButton={
-        <button
-          disabled={!id}
-          className='edit-template__header-btn'
-          onClick={handleExportHtmlFile}>
-          Export
-        </button>
+        <div>
+          <button
+            disabled={!id}
+            className='edit-template__header-btn'
+            onClick={() => setIsOpenPreview(true)}>
+            Preview
+          </button>
+          <button
+            disabled={!id}
+            className='edit-template__header-btn'
+            onClick={handleExportHtmlFile}>
+            Export
+          </button>
+        </div>
       }>
       {listElementComponent}
       {pageSettingsComponent}
+      {isOpenPreview && (
+        <Modal
+          data={generateHtml({ name: templateData.name, elements })}
+          isOpen={isOpenPreview}
+          onClose={() => setIsOpenPreview(false)}
+        />
+      )}
     </MainLayout>
   );
 };
