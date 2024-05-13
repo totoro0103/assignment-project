@@ -8,12 +8,12 @@ export const MainLayout = ({
   headerRightButton,
 }: MainLayoutProps) => {
   return (
-    <main className='main-layout'>
-      <header className='main-layout__header'>
+    <>
+      <header>
         <h1>My App</h1>
         {headerRightButton}
       </header>
-      <div className='main-layout__content'>{children}</div>
-    </main>
+      <main>{children}</main>
+    </>
   );
 };

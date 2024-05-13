@@ -125,8 +125,97 @@ export const exportHandler = (data: Template) => {
   link.click();
 };
 
-export const getTemplate = () => {
-  const elements: Element[] = [
+export const getTemplate = (): Template[] => {
+  const elements1: Element[] = [
+    {
+      id: makeId(),
+      label: "Page Settings",
+      type: ElementTypes.Page,
+      stringHtml: "<div/>",
+      settings: getPagesElementSettings(),
+    },
+    {
+      id: makeId(),
+      label: "Spacer Settings",
+      type: ElementTypes.Spacer,
+      stringHtml: "<div/>",
+      settings: getSpacerElementSettings(),
+    },
+    {
+      id: makeId(),
+      label: "Title Settings",
+      type: ElementTypes.Heading,
+      stringHtml: "<h1/>",
+      defaultStyles: [
+        {
+          key: "workBreak",
+          value: "break-all",
+        },
+      ],
+      settings: getHeadingElementSettings(),
+    },
+    {
+      id: makeId(),
+      label: "Spacer Settings",
+      type: ElementTypes.Spacer,
+      stringHtml: "<div/>",
+      settings: getSpacerElementSettings(),
+    },
+    {
+      id: makeId(),
+      label: "Image Settings",
+      type: ElementTypes.Image,
+      stringHtml: "<img />",
+      defaultStyles: [
+        {
+          key: "height",
+          value: "100%",
+        },
+        {
+          key: "objectFit",
+          value: "cover",
+        },
+        {
+          key: "maxWidth",
+          value: "100%",
+        },
+      ],
+      settings: getImageElementSettings({
+        textAlign: "left",
+      }),
+    },
+    {
+      id: makeId(),
+      label: "Spacer Settings",
+      type: ElementTypes.Spacer,
+      stringHtml: "<div/>",
+      settings: getSpacerElementSettings(),
+    },
+    {
+      id: makeId(),
+      label: "Paragraph Settings",
+      type: ElementTypes.Paragraph,
+      stringHtml: "<p/>",
+      defaultStyles: [
+        {
+          key: "workBreak",
+          value: "break-all",
+        },
+      ],
+      settings: getParagraphElementSettings(),
+    },
+    {
+      id: makeId(),
+      label: "Spacer Settings",
+      type: ElementTypes.Spacer,
+      stringHtml: "<div/>",
+      settings: getSpacerElementSettings({
+        height: "180px",
+      }),
+    },
+  ];
+
+  const elements2: Element[] = [
     {
       id: makeId(),
       label: "Page Settings",
@@ -162,7 +251,9 @@ export const getTemplate = () => {
           value: "100%",
         },
       ],
-      settings: getImageElementSettings(),
+      settings: getImageElementSettings({
+        textAlign: "left",
+      }),
     },
     {
       id: makeId(),
@@ -176,6 +267,12 @@ export const getTemplate = () => {
       label: "Title Settings",
       type: ElementTypes.Heading,
       stringHtml: "<h1/>",
+      defaultStyles: [
+        {
+          key: "workBreak",
+          value: "break-all",
+        },
+      ],
       settings: getHeadingElementSettings(),
     },
     {
@@ -190,6 +287,12 @@ export const getTemplate = () => {
       label: "Paragraph Settings",
       type: ElementTypes.Paragraph,
       stringHtml: "<p/>",
+      defaultStyles: [
+        {
+          key: "workBreak",
+          value: "break-all",
+        },
+      ],
       settings: getParagraphElementSettings(),
     },
     {
@@ -204,10 +307,16 @@ export const getTemplate = () => {
   ];
 
   const template1 = {
-    id: makeId(),
+    id: "template-1",
     name: "Template 1",
-    elements: elements,
+    elements: elements1,
   };
 
-  return template1;
+  const template2 = {
+    id: "template-2",
+    name: "Template 2",
+    elements: elements2,
+  };
+
+  return [template1, template2];
 };

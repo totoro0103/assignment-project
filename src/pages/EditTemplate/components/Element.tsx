@@ -22,8 +22,8 @@ export const Element: React.FC<ElementProps> = ({
     const htmlElement = divContainer.firstChild as
       | HTMLElement
       | HTMLImageElement;
-
     if (data.defaultStyles) {
+      htmlElement.style.wordBreak = "break-all";
       data.defaultStyles.forEach((style) => {
         htmlElement.style[style.key] = style.value;
       });

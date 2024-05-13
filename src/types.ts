@@ -47,4 +47,5 @@ export interface Template {
   id?: string;
   name?: string;
   elements: Element[];
+  iframeSnapshotImg?: string;
 }

@@ -1,13 +1,37 @@
 import { useMemo, useState } from "react";
 import { exportHandler, getTemplate } from "../../utils";
 import { Element } from "./components/Element";
-import { Element as IElement, ElementTypes } from "../../types";
+import { Element as IElement, ElementTypes, Template } from "../../types";
 import { ElementSettingItem } from "./components/ElementSettingItem";
 import { MainLayout } from "../../components/Layout/MainLayout";
+import { useParams } from "react-router-dom";
 type EditTemplateProps = unknown;
-const templateData = getTemplate();
+const templates = getTemplate();
 
 export const EditTemplate: React.FC<EditTemplateProps> = () => {
+  const params = useParams();
+  const id = params.id as string;
+
+  const templateData = templates.find(
+    (template) => template.id === id
+  ) as Template;
+
+  if (!templateData?.elements) {
+    return (
+      <MainLayout
+        headerRightButton={
+          <button
+            disabled={!id}
+            className='edit-template__header-btn'
+            onClick={() => {}}>
+            Export
+          </button>
+        }>
+        <h1>Template not found</h1>
+      </MainLayout>
+    );
+  }
+
   const [elements, setElements] = useState<IElement[]>(templateData.elements);
 
   const pageElement = elements.find(
@@ -64,8 +88,10 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
     );
 
     return (
-      <div className='edit-template__page-settings-container'>
-        <h3>{elementSelected.label}</h3>
+      <div className='sidebar customized-scrollbar'>
+        <h3 className='edit-template__page-settings-title'>
+          {elementSelected.label}
+        </h3>
         <div className='edit-template__page-settings customized-scrollbar'>
           {settings?.settings.map((setting) => {
             return (
@@ -86,9 +112,9 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
 
   const listElementComponent = useMemo(
     () => (
-      <div className='edit-template__content customized-scrollbar'>
+      <div className='content'>
         <div
-          className='edit-template__page'
+          className='edit-template__page customized-scrollbar'
           style={{ background: pageStyles.backgroundColor }}
           onClick={() => {
             handleSelectElement(pageElement as IElement);
@@ -121,7 +147,8 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
     <MainLayout
       headerRightButton={
         <button
-          className='main-layout__header-button'
+          disabled={!id}
+          className='edit-template__header-btn'
           onClick={handleExportHtmlFile}>
           Export
         </button>
