@@ -41,6 +41,8 @@ export interface Element {
   stringHtml: string;
   defaultStyles?: { key: any; value: any }[];
   settings: ElementSettings[];
+  isAddSelectorTop?: boolean;
+  isAddSelectorBottom?: boolean;
 }
 
 export interface Template {

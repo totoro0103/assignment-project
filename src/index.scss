@@ -240,28 +240,67 @@ main {
   }
 }
 
-.edit-template__remove-element {
+.edit-template__action-element {
   cursor: pointer;
   width: 30px;
+  height: 30px;
   visibility: hidden;
   background-color: $color-black;
   color: $color-white;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px 0;
   border-radius: 6px;
   position: absolute;
   z-index: 1;
-  top: 50%;
-  left: 100%;
-  margin-left: 10px;
-  margin-top: -20px;
   opacity: 0;
   transition: opacity 0.3s;
   font-size: 20px;
   visibility: visible;
   opacity: 1;
+}
+.remove-element {
+  top: 50%;
+  left: 100%;
+  margin-left: 10px;
+  margin-top: -20px;
+}
+
+.add-prev-element {
+  top: -30px;
+  left: 50%;
+}
+
+.add-next-element {
+  bottom: -30px;
+  left: 50%;
+}
+
+.edit-template__element-selector {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid $color-gray;
+}
+
+.element-selector__container {
+  display: flex;
+  gap: 10px;
+}
+
+.element-selector__button {
+  background-color: $color-black;
+  color: $color-white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 8px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .slider::-webkit-slider-thumb {

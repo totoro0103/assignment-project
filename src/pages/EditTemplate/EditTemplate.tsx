@@ -99,6 +99,13 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
       prevData.filter((element) => element.id !== val.id)
     );
   }, []);
+  const handleChangeSelectorState = useCallback((val: IElement) => {
+    setElementSelected(val);
+    setElements((prevData) =>
+      prevData.map((element) => (element.id === val.id ? val : element))
+    );
+  }, []);
+  const handleAddElement = useCallback((val: IElement) => {}, []);
 
   const pageSettingsComponent = useMemo(() => {
     const settings = elements.find(
@@ -137,7 +144,6 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
   };
 
   const handleDragEnd = (result: DropResult) => {
-    console.log(result);
     if (!result.destination) {
       return;
     }
@@ -157,6 +163,13 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
           style={{ background: pageStyles.backgroundColor }}
           onClick={() => {
             handleSelectElement(pageElement as IElement);
+            setElements((prevData) =>
+              prevData.map((element) => ({
+                ...element,
+                isAddSelectorBottom: false,
+                isAddSelectorTop: false,
+              }))
+            );
           }}>
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId='droppable'>
@@ -189,6 +202,10 @@ export const EditTemplate: React.FC<EditTemplateProps> = () => {
                                   data={element}
                                   onSelect={handleSelectElement}
                                   onRemove={handleRemoveElement}
+                                  onChangeSelectorState={
+                                    handleChangeSelectorState
+                                  }
+                                  onAddElement={handleAddElement}
                                 />
                               </div>
                             );
